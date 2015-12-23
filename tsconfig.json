@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "declaration": true,
+    "target": "es3",
+    "out": "dist/predators-es6-injector.js",
+    "sourceMap": true
+  },
+  "files": [
+    "typings/tsd.d.ts",
+    "src/Helpers.ts",
+    "src/Component.ts",
+    "src/Module.ts",
+    "src/Injector.ts"
+  ]
+}
