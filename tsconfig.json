@@ -12,7 +12,9 @@
     "typings/tsd.d.ts",
     "src/Helpers.ts",
     "src/Component.ts",
+    "src/ModuleScope.ts",
     "src/Module.ts",
-    "src/Injector.ts"
+    "src/Injector.ts",
+    "src/Application.ts"
   ]
 }

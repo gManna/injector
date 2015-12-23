@@ -1,21 +1,19 @@
-interface ModuleScope<T> {}
-
-interface IModule<T> {
+interface IModule {
   id: string;
   factory: Function;
   scope: ModuleScope;
   toString(): string;
 }
 
-class Module implements IModule, ModuleScope {
+class Module implements IModule {
   id: string;
   factory: Function;
-  scope: Object;
+  scope: ModuleScope;
 
   constructor(id:string, factory:Function) {
     this.id = id;
     this.factory = factory;
-    this.scope = {};
+    this.scope = new ModuleScope();
   }
 
   toString() {

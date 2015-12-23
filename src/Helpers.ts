@@ -6,9 +6,11 @@ function isFunction(input:any) {
   return jQuery.isFunction(input);
 }
 
-var reject = function (reason?:any) {
+var reject = function(reason?:any) {
   return jQuery.Deferred().reject(reason);
 };
 
-var resolve = jQuery.when;
+var resolve = function() {
+  return jQuery.when.apply(jQuery, arguments);
+};
 

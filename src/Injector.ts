@@ -1,12 +1,14 @@
 interface Injector {
   setModule(moduleId:string, factory:Function): Injector;
-  getModule(moduleId:string): JQueryDeferred<Module>;
+  getModule(moduleId:string): JQueryDeferred<Module|JQueryPromiseCallback<any>>;
   hasModuleSync(moduleId:string): boolean;
-  hasModule(moduleId:string): JQueryDeferred<void>;
-  inspectModule(module:string | Module): ModuleScope;
-  runModule(module:string | Module): JQueryDeferred<any>;
-  runModules(module:string | Module[]): JQueryDeferred<any>;
-  yTosReady(module:Module): JQueryDeferred<any>;
+  hasModule(moduleId:string): JQueryDeferred<Module|JQueryPromiseCallback<any>>;
+
+  inspectModule(module:string | Module): JQueryDeferred<ModuleScope|JQueryPromiseCallback<any>>;
+
+  yTosReady(module:Module): JQueryDeferred<Module|JQueryPromiseCallback<any>>;
+  runModule(module:string | Module): JQueryDeferred<Module|JQueryPromiseCallback<any>>;
+  runModules(module:string[] | Module[]): JQueryDeferred<Module[]|Error[]>;
 
   setComponent(id:string, definition:any): Injector;
   getComponent(moduleId:string): Component;
@@ -16,14 +18,14 @@ interface Injector {
 class $M implements Injector {
   _YTOS_READY_EVENT_:string = 'yTosReady';
 
-  _INJECTOR_MODULES_CONTAINER_:any = {};
-  _INJECTOR_COMPONENTS_CONTAINER_:any = {};
+  _INJECTOR_MODULES_CONTAINER_:Object = {};
+  _INJECTOR_COMPONENTS_CONTAINER_:Object = {};
 
   constructor() {
   }
 
   getModule(id:string) {
-    if (!isString(id)) {
+    if(!isString(id)) {
       return reject("$M.getModule, first param must be a string");
     }
 
@@ -34,10 +36,10 @@ class $M implements Injector {
   }
 
   inspectModule(module:string | Module) {
-    var promise = reject(`$M.inspectModule unknown ${module}, param must be a string or a Module`);
+    var promise:JQueryDeferred<Module|JQueryPromiseCallback<any>> = reject(`$M.inspectModule unknown ${module}, param must be a string or a Module`);
 
-    if (isString(module)) {
-      promise = this.getModule(module.toString());
+    if(isString(module)) {
+      promise = this.getModule((module || '').toString());
     }
 
     if(Module.isModule(module)) {
@@ -46,19 +48,19 @@ class $M implements Injector {
 
     return promise
       .then(module => module.scope)
-    ;
+      ;
   }
 
   setModule(id:string, factory:Function) {
-    if (!isString(id)) {
+    if(!isString(id)) {
       throw Error("$M.setModule, first param must be a string");
     }
 
-    if (!isFunction(id)) {
+    if(!isFunction(id)) {
       throw Error("$M.setModule, second param must be a function");
     }
 
-    if (this.hasModuleSync(id)) {
+    if(this.hasModuleSync(id)) {
       throw Error(`$M.setModule ${id} alredy exists`);
     }
 
@@ -75,23 +77,23 @@ class $M implements Injector {
     return this.hasModuleSync(id) ? resolve() : reject();
   }
 
-  runModules(modules) {
-    var promises = [];
+  runModules(modules:string[] | Module[]) {
+    var promises:Array<string|Module> = [];
 
-    for (var i = 0; i < modules.length; i++) {
+    for(var i = 0; i < modules.length; i++) {
       var module = modules[i];
 
       promises.push(this.runModule(module));
     }
 
-    return resolve.apply(jQuery, modules);
+    return resolve.apply(jQuery, promises);
   }
 
   runModule(module:string | Module) {
-    var promise = reject(`$M.runModule unknown ${module}, param must be a string or a Module`);
+    var promise:JQueryDeferred<Module|JQueryPromiseCallback<any>> = reject(`$M.runModule unknown ${module}, param must be a string or a Module`);
 
-    if (isString(module)) {
-      promise = this.getModule(module.toString());
+    if(isString(module)) {
+      promise = this.getModule((module || '').toString());
     }
 
     if(Module.isModule(module)) {
@@ -99,8 +101,8 @@ class $M implements Injector {
     }
 
     return promise
-      .then(module => {
-        var failure, deferred = jQuery.Deferred();
+      .then((module:Module) => {
+        var failure:Error, deferred:JQueryDeferred = jQuery.Deferred();
 
         try {
           module.factory.call(module.scope, jQuery);
@@ -121,11 +123,11 @@ class $M implements Injector {
   }
 
   setComponent(id:string, definition:any) {
-    if (!isString(id)) {
+    if(!isString(id)) {
       throw Error("$M.setComponent, first param must be a string");
     }
 
-    if (this.hasComponent(id)) {
+    if(this.hasComponent(id)) {
       throw Error(`$M.setComponent ${id} alredy exists`);
     }
 
@@ -135,11 +137,11 @@ class $M implements Injector {
   }
 
   getComponent(id:string) {
-    if (!isString(id)) {
+    if(!isString(id)) {
       throw Error("$M.getComponent, first param must be a string");
     }
 
-    if (!this.hasComponent(id)) {
+    if(!this.hasComponent(id)) {
       throw Error(`$M.Component ${id} not found`);
     }
 
@@ -151,7 +153,7 @@ class $M implements Injector {
   }
 
   yTosReady(module:any) {
-    let deferred = jQuery.Deferred();
+    let deferred:JQueryDeferred = jQuery.Deferred();
 
     jQuery(document).on(this._YTOS_READY_EVENT_, () => {
       deferred.resolve(this.runModule(module));
@@ -161,7 +163,3 @@ class $M implements Injector {
   }
 }
 
-interface Window {
-  $M: $M
-}
-window.$M = new $M();

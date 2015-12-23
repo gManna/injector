@@ -1,4 +1,4 @@
-interface IComponent<T> {
+interface IComponent {
   id: string;
   definition: any;
 }
@@ -11,6 +11,5 @@ class Component implements IComponent {
     this.id = id;
     this.definition = definition;
   }
-
 }
 
