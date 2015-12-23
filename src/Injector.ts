@@ -16,8 +16,8 @@ interface Injector {
 class $M implements Injector {
   _YTOS_READY_EVENT_:string = 'yTosReady';
 
-  _INJECTOR_MODULES_CONTAINER_:any[] = [];
-  _INJECTOR_COMPONENTS_CONTAINER_:any[] = [];
+  _INJECTOR_MODULES_CONTAINER_:any = {};
+  _INJECTOR_COMPONENTS_CONTAINER_:any = {};
 
   constructor() {
   }
