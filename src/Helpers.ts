@@ -7,7 +7,13 @@ function isFunction(input:any) {
 }
 
 var reject = function(reason?:any) {
-  return jQuery.Deferred().reject(reason);
+  var deferred = jQuery.Deferred();
+
+  setTimeout(() => {
+    deferred.reject(reason);
+  }, 0);
+
+  return deferred.promise();
 };
 
 var resolve = function() {

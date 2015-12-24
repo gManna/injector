@@ -21,18 +21,22 @@ class $M implements Injector {
   _INJECTOR_MODULES_CONTAINER_:Object = {};
   _INJECTOR_COMPONENTS_CONTAINER_:Object = {};
 
-  constructor() {
-  }
-
   getModule(id:string) {
-    if(!isString(id)) {
-      return reject("$M.getModule, first param must be a string");
-    }
+    var deferred = jQuery.Deferred();
 
-    return this
-      .hasModule(id)
-      .then(() => this._INJECTOR_MODULES_CONTAINER_[id])
-      .fail(() => reject(`$M unknown module ${id}`))
+    window.setTimeout(() => {
+      if(!isString(id)) {
+         return deferred.reject("$M.getModule, first param must be a string");
+      }
+
+      if(this.hasModuleSync(id)) {
+        return deferred.resolve(this._INJECTOR_MODULES_CONTAINER_[id])
+      }
+
+      return deferred.reject(`$M unknown module ${id}`)
+    });
+
+    return deferred.promise();
   }
 
   inspectModule(module:string | Module) {
@@ -56,7 +60,7 @@ class $M implements Injector {
       throw Error("$M.setModule, first param must be a string");
     }
 
-    if(!isFunction(id)) {
+    if(!isFunction(factory)) {
       throw Error("$M.setModule, second param must be a function");
     }
 
@@ -156,7 +160,7 @@ class $M implements Injector {
     let deferred:JQueryDeferred = jQuery.Deferred();
 
     jQuery(document).on(this._YTOS_READY_EVENT_, () => {
-      deferred.resolve(this.runModule(module));
+      deferred.resolve(module && this.runModule(module));
     });
 
     return deferred.promise();
