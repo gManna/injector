@@ -40,7 +40,7 @@ class $M implements Injector {
   }
 
   inspectModule(module:string | Module) {
-    var promise:JQueryDeferred<Module|JQueryPromiseCallback<any>> = reject(`$M.inspectModule unknown ${module}, param must be a string or a Module`);
+    var promise = reject(`$M.inspectModule unknown ${module}, param must be a string or a Module`);
 
     if(isString(module)) {
       promise = this.getModule((module || '').toString());
@@ -52,7 +52,7 @@ class $M implements Injector {
 
     return promise
       .then(module => module.scope)
-      ;
+    ;
   }
 
   setModule(id:string, factory:Function) {
@@ -94,7 +94,7 @@ class $M implements Injector {
   }
 
   runModule(module:string | Module) {
-    var promise:JQueryDeferred<Module|JQueryPromiseCallback<any>> = reject(`$M.runModule unknown ${module}, param must be a string or a Module`);
+    var promise = reject(`$M.runModule unknown ${module}, param must be a string or a Module`);
 
     if(isString(module)) {
       promise = this.getModule((module || '').toString());
@@ -166,4 +166,3 @@ class $M implements Injector {
     return deferred.promise();
   }
 }
-

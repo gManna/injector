@@ -16,8 +16,8 @@ describe('$M.hasModuleSync', function() {
     expect($M.hasModuleSync('foobar')).toBeFalsy();
   });
 
-  it("should doesn not consider prototype inheritance", function() {
-    expect($M.hasOwnProperty).toBeTruthy();
+  it("should does not consider prototype inheritance", function() {
+    expect($M._INJECTOR_MODULES_CONTAINER_.hasOwnProperty).toBeTruthy();
     expect($M.hasModuleSync('hasOwnProperty')).toBeFalsy();
   });
 
