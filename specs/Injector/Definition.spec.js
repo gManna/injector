@@ -38,28 +38,28 @@ describe('Interface Definition', function() {
   });
 
   it('should has a setModule method', function() {
-    expect($M.setModule).toBeDefined();
-    expect(typeof $M.setModule).toBe("function");
+    expect($M.set).toBeDefined();
+    expect(typeof $M.set).toBe("function");
   });
 
   it('should has a getModule method', function() {
-    expect($M.getModule).toBeDefined();
-    expect(typeof $M.getModule).toBe("function");
+    expect($M.get).toBeDefined();
+    expect(typeof $M.get).toBe("function");
   });
 
   it('should has a hasModule method', function() {
-    expect($M.hasModule).toBeDefined();
-    expect(typeof $M.hasModule).toBe("function");
+    expect($M.has).toBeDefined();
+    expect(typeof $M.has).toBe("function");
   });
 
   it('should has a hasModuleSync method', function() {
-    expect($M.hasModuleSync).toBeDefined();
-    expect(typeof $M.hasModuleSync).toBe("function");
+    expect($M.hasSync).toBeDefined();
+    expect(typeof $M.hasSync).toBe("function");
   });
 
   it('should has a inspectModule method', function() {
-    expect($M.inspectModule).toBeDefined();
-    expect(typeof $M.inspectModule).toBe("function");
+    expect($M.inspect).toBeDefined();
+    expect(typeof $M.inspect).toBe("function");
   });
 
   it('should has a yTosReady method', function() {
@@ -77,18 +77,4 @@ describe('Interface Definition', function() {
     expect(typeof $M.runModules).toBe("function");
   });
 
-  it('should has a getComponent method', function() {
-    expect($M.getComponent).toBeDefined();
-    expect(typeof $M.getComponent).toBe("function");
-  });
-
-  it('should has a setComponent method', function() {
-    expect($M.setComponent).toBeDefined();
-    expect(typeof $M.setComponent).toBe("function");
-  });
-
-  it('should has a hasComponent method', function() {
-    expect($M.hasComponent).toBeDefined();
-    expect(typeof $M.hasComponent).toBe("function");
-  });
 });

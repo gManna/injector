@@ -1,4 +1,4 @@
-describe('$M.setModule', function() {
+fdescribe('$M.set', function() {
   var $M;
 
   beforeEach(function(done) {
@@ -14,34 +14,34 @@ describe('$M.setModule', function() {
   it("should throw if first param is not string", function() {
 
     expect(function() {
-      $M.setModule();
-    }).toThrowError("$M.setModule, first param must be a string");
+      $M.set();
+    }).toThrowError("$M.set, first param must be a string");
 
   });
 
   it("should throw if first param is string and second is not a function", function() {
     expect(function() {
-      $M.setModule('TypeIsString', 'TypeIsNotFunction')
-    }).toThrowError("$M.setModule, second param must be a function");
+      $M.set('TypeIsString', 'TypeIsNotFunction')
+    }).toThrowError("$M.set, second param must be a function");
   });
 
   it("should return true if module is correctly registered", function() {
-    $M.setModule('foo', function () {});
+    $M.set('foo', function () {});
 
-    expect($M.hasModuleSync('foo')).toBeTruthy();
+    expect($M.hasSync('foo')).toBeTruthy();
 
   });
 
   it('cannot register a module already registered', function() {
     var moduleName = 'Test';
 
-    expect($M.hasModuleSync(moduleName)).toBeFalsy();
-    $M.setModule(moduleName, function () {});
-    expect($M.hasModuleSync(moduleName)).not.toBeFalsy();
+    expect($M.hasSync(moduleName)).toBeFalsy();
+    $M.set(moduleName, function () {});
+    expect($M.hasSync(moduleName)).not.toBeFalsy();
 
     expect(function() {
-      $M.setModule(moduleName, function () {});
-    }).toThrowError('$M.setModule '+ moduleName +' alredy exists');
+      $M.set(moduleName, function () {});
+    }).toThrowError('$M.set '+ moduleName +' alredy exists');
   });
 
 });

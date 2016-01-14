@@ -16,9 +16,9 @@ describe('$M.getModule', function() {
     it("should fail if param is a number", function(done) {
       var param = 111;
       $M
-        .getModule(param)
+        .get(param)
         .fail(function(error) {
-          expect(error).toEqual("$M.getModule, first param must be a string");
+          expect(error).toEqual("$M.get, first param must be a string");
         })
         .always(function() {
           done();
@@ -29,9 +29,9 @@ describe('$M.getModule', function() {
     it("should fail if param is a object", function(done) {
       var param = {};
       $M
-        .getModule(param)
+        .get(param)
         .fail(function(error) {
-          expect(error).toEqual("$M.getModule, first param must be a string");
+          expect(error).toEqual("$M.get, first param must be a string");
         })
         .always(function() {
           done();
@@ -42,9 +42,9 @@ describe('$M.getModule', function() {
     it("should fail if param is an array", function(done) {
       var param = [];
       $M
-        .getModule(param)
+        .get(param)
         .fail(function(error) {
-          expect(error).toEqual("$M.getModule, first param must be a string");
+          expect(error).toEqual("$M.get, first param must be a string");
         })
         .always(function() {
           done();
@@ -55,9 +55,9 @@ describe('$M.getModule', function() {
     it("should fail if param is a function", function(done) {
       var param = function() {};
       $M
-        .getModule(param)
+        .get(param)
         .fail(function(error) {
-          expect(error).toEqual("$M.getModule, first param must be a string");
+          expect(error).toEqual("$M.get, first param must be a string");
         })
         .always(function() {
           done();
@@ -69,9 +69,9 @@ describe('$M.getModule', function() {
       var param = "foo";
 
       $M
-        .getModule(param)
+        .get(param)
         .fail(function(error) {
-          expect(error).not.toEqual("$M.getModule, first param must be a string");
+          expect(error).not.toEqual("$M.get, first param must be a string");
         })
         .always(function() {
           done();
@@ -85,7 +85,7 @@ describe('$M.getModule', function() {
     var param = "foo";
 
     $M
-      .getModule(param)
+      .get(param)
       .fail(function(error) {
         expect(error).toEqual("$M unknown module " + param);
       })
@@ -95,14 +95,14 @@ describe('$M.getModule', function() {
     ;
   });
 
-  it("should call hasModuleSync", function(done) {
+  it("should call hasSync", function(done) {
 
-    spyOn($M, 'hasModuleSync').and.callThrough();
+    spyOn($M, 'hasSync').and.callThrough();
 
     $M
-      .getModule("foo")
+      .get("foo")
       .always(function() {
-        expect($M.hasModuleSync).toHaveBeenCalled();
+        expect($M.hasSync).toHaveBeenCalled();
         done();
       })
     ;
@@ -111,11 +111,11 @@ describe('$M.getModule', function() {
   it("should find the module", function(done) {
     var moduleName = 'Foo';
 
-    $M.setModule(moduleName, function() {
+    $M.set(moduleName, function() {
     });
 
     $M
-      .getModule(moduleName)
+      .get(moduleName)
       .then(function(module) {
         expect(module.id).toEqual(moduleName);
       })

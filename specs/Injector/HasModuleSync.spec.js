@@ -13,17 +13,17 @@ describe('$M.hasModuleSync', function() {
 
 
   it("should return false if does not exist", function() {
-    expect($M.hasModuleSync('foobar')).toBeFalsy();
+    expect($M.hasSync('foobar')).toBeFalsy();
   });
 
   it("should does not consider prototype inheritance", function() {
     expect($M._INJECTOR_MODULES_CONTAINER_.hasOwnProperty).toBeTruthy();
-    expect($M.hasModuleSync('hasOwnProperty')).toBeFalsy();
+    expect($M.hasSync('hasOwnProperty')).toBeFalsy();
   });
 
   it("should return true if exists", function() {
-    $M.setModule('bar', function() {});
-    expect($M.hasModuleSync('bar')).toBeTruthy();
+    $M.set('bar', function() {});
+    expect($M.hasSync('bar')).toBeTruthy();
   });
 
 

@@ -12,7 +12,7 @@ describe('$M.hasModule', function() {
   });
 
   it("should reject if module does not exist", function(done) {
-    var promise = $M.hasModule('baz');
+    var promise = $M.has('baz');
 
     promise
       .always(function() {
@@ -23,13 +23,13 @@ describe('$M.hasModule', function() {
     ;
   });
 
-  it("should call hasModuleSync", function(done) {
-    spyOn($M, 'hasModuleSync').and.callThrough();
+  it("should call hasSync", function(done) {
+    spyOn($M, 'hasSync').and.callThrough();
 
     $M
-      .hasModule('baz')
+      .has('baz')
       .always(function() {
-        expect($M.hasModuleSync).toHaveBeenCalled();
+        expect($M.hasSync).toHaveBeenCalled();
 
         done();
       })
@@ -37,9 +37,9 @@ describe('$M.hasModule', function() {
   });
 
   it("should not reject if module exists", function(done) {
-    $M.setModule('baz', function() {});
+    $M.set('baz', function() {});
 
-    var promise = $M.hasModule('baz');
+    var promise = $M.has('baz');
 
     promise
       .always(function() {
@@ -54,7 +54,7 @@ describe('$M.hasModule', function() {
     expect($M.hasOwnProperty).toBeDefined();
 
     $M
-      .getModule('hasOwnProperty')
+      .get('hasOwnProperty')
       .always(function() {
         expect(this.state()).toEqual('rejected');
         done();

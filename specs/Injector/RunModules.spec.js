@@ -1,4 +1,4 @@
-describe('$M.setModule', function() {
+describe('$M.set', function() {
   var $M;
 
   beforeEach(function(done) {
@@ -13,7 +13,7 @@ describe('$M.setModule', function() {
 
   it("should run ", function(done) {
       $M
-        .inspectModule()
+        .inspect()
         .fail(function() {
           expect(this.state()).toBe('rejected');
         })

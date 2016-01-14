@@ -1,4 +1,4 @@
-fdescribe('$M.setModule', function() {
+describe('$M.set', function() {
   var $M;
 
   beforeEach(function(done) {
@@ -24,10 +24,10 @@ fdescribe('$M.setModule', function() {
   });
 
   it("should work with a Module Object as a param", function(done) {
-    $M.setModule('test2', function() {});
+    $M.set('test2', function() {});
 
     $M
-      .getModule('test2')
+      .get('test2')
       .then(function(testModule) {
         return $M.runModule(testModule);
       })
@@ -39,7 +39,7 @@ fdescribe('$M.setModule', function() {
   });
 
   it("should reject if a Module Object throws an error", function(done) {
-    $M.setModule('test3', function() {
+    $M.set('test3', function() {
       console.log(foo);
     });
 
@@ -52,7 +52,6 @@ fdescribe('$M.setModule', function() {
         done();
       })
     ;
-
   });
 
 });

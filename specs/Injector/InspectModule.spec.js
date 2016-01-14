@@ -13,7 +13,7 @@ describe('$M.setModule', function() {
 
   it("should be rejected if first param is not a string or a Module Object", function(done) {
       $M
-        .inspectModule()
+        .inspect()
         .fail(function() {
           expect(this.state()).toBe('rejected');
         })
@@ -24,12 +24,12 @@ describe('$M.setModule', function() {
   });
 
   it("should work with a Module Object as a param", function(done) {
-    $M.setModule('test', function() {});
+    $M.set('test', function() {});
 
     $M
-      .getModule('test')
+      .get('test')
       .then(function(testModule) {
-        return $M.inspectModule(testModule);
+        return $M.inspect(testModule);
       })
       .then(function(scope) {
       })
@@ -41,17 +41,17 @@ describe('$M.setModule', function() {
   });
 
   it("should work with a Module Object as a param", function(done) {
-    $M.setModule('test1', function() {
+    $M.set('test1', function() {
       this.greetings = 'Hello World';
     });
 
     $M
-      .getModule('test1')
+      .get('test1')
       .then(function(testModule) {
         return $M.runModule(testModule);
       })
       .then(function(testModule) {
-        return $M.inspectModule(testModule);
+        return $M.inspect(testModule);
       })
       .then(function(scope) {
         expect(scope.greetings).toEqual('Hello World');

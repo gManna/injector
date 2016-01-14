@@ -1,18 +1,15 @@
 interface Injector {
-  setModule(moduleId:string, factory:Function): Injector;
-  getModule(moduleId:string): JQueryDeferred<Module|JQueryPromiseCallback<any>>;
-  hasModuleSync(moduleId:string): boolean;
-  hasModule(moduleId:string): JQueryDeferred<Module|JQueryPromiseCallback<any>>;
+  set(moduleId:string, factory:Function): Injector;
+  get(moduleId:string): JQueryDeferred<Module|JQueryPromiseCallback<any>>;
+  hasSync(moduleId:string): boolean;
+  has(moduleId:string): JQueryDeferred<Module|JQueryPromiseCallback<any>>;
 
-  inspectModule(module:string | Module): JQueryDeferred<ModuleScope|JQueryPromiseCallback<any>>;
+  inspect(module:string | Module): JQueryDeferred<ModuleScope|JQueryPromiseCallback<any>>;
 
   yTosReady(module:Module): JQueryDeferred<Module|JQueryPromiseCallback<any>>;
   runModule(module:string | Module): JQueryDeferred<Module|JQueryPromiseCallback<any>>;
   runModules(module:string[] | Module[]): JQueryDeferred<Module[]|Error[]>;
 
-  setComponent(id:string, definition:any): Injector;
-  getComponent(moduleId:string): Component;
-  hasComponent(componentId:string): boolean;
 }
 
 class $M implements Injector {
@@ -21,15 +18,15 @@ class $M implements Injector {
   _INJECTOR_MODULES_CONTAINER_:Object = {};
   _INJECTOR_COMPONENTS_CONTAINER_:Object = {};
 
-  getModule(id:string) {
+  get(id:string) {
     var deferred = jQuery.Deferred();
 
     window.setTimeout(() => {
       if(!isString(id)) {
-         return deferred.reject("$M.getModule, first param must be a string");
+         return deferred.reject("$M.get, first param must be a string");
       }
 
-      if(this.hasModuleSync(id)) {
+      if(this.hasSync(id)) {
         return deferred.resolve(this._INJECTOR_MODULES_CONTAINER_[id])
       }
 
@@ -39,11 +36,11 @@ class $M implements Injector {
     return deferred.promise();
   }
 
-  inspectModule(module:string | Module) {
-    var promise = reject(`$M.inspectModule unknown ${module}, param must be a string or a Module`);
+  inspect(module:string | Module) {
+    var promise = reject(`$M.inspect unknown ${module}, param must be a string or a Module`);
 
     if(isString(module)) {
-      promise = this.getModule((module || '').toString());
+      promise = this.get((module || '').toString());
     }
 
     if(Module.isModule(module)) {
@@ -55,17 +52,17 @@ class $M implements Injector {
     ;
   }
 
-  setModule(id:string, factory:Function) {
+  set(id:string, factory:Function) {
     if(!isString(id)) {
-      throw Error("$M.setModule, first param must be a string");
+      throw Error("$M.set, first param must be a string");
     }
 
     if(!isFunction(factory)) {
-      throw Error("$M.setModule, second param must be a function");
+      throw Error("$M.set, second param must be a function");
     }
 
-    if(this.hasModuleSync(id)) {
-      throw Error(`$M.setModule ${id} alredy exists`);
+    if(this.hasSync(id)) {
+      throw Error(`$M.set ${id} alredy exists`);
     }
 
     this._INJECTOR_MODULES_CONTAINER_[id] = new Module(id, factory);
@@ -73,12 +70,12 @@ class $M implements Injector {
     return this;
   }
 
-  hasModuleSync(id:string) {
+  hasSync(id:string) {
     return this._INJECTOR_MODULES_CONTAINER_.hasOwnProperty(id);
   }
 
-  hasModule(id:string) {
-    return this.hasModuleSync(id) ? resolve() : reject();
+  has(id:string) {
+    return this.hasSync(id) ? resolve() : reject();
   }
 
   runModules(modules:string[] | Module[]) {
@@ -97,7 +94,7 @@ class $M implements Injector {
     var promise = reject(`$M.runModule unknown ${module}, param must be a string or a Module`);
 
     if(isString(module)) {
-      promise = this.getModule((module || '').toString());
+      promise = this.get((module || '').toString());
     }
 
     if(Module.isModule(module)) {
@@ -126,35 +123,6 @@ class $M implements Injector {
       })
   }
 
-  setComponent(id:string, definition:any) {
-    if(!isString(id)) {
-      throw Error("$M.setComponent, first param must be a string");
-    }
-
-    if(this.hasComponent(id)) {
-      throw Error(`$M.setComponent ${id} alredy exists`);
-    }
-
-    this._INJECTOR_COMPONENTS_CONTAINER_[id] = new Component(id, definition);
-
-    return this;
-  }
-
-  getComponent(id:string) {
-    if(!isString(id)) {
-      throw Error("$M.getComponent, first param must be a string");
-    }
-
-    if(!this.hasComponent(id)) {
-      throw Error(`$M.Component ${id} not found`);
-    }
-
-    return this._INJECTOR_COMPONENTS_CONTAINER_[id].definition;
-  }
-
-  hasComponent(id:string) {
-    return this._INJECTOR_COMPONENTS_CONTAINER_.hasOwnProperty(id);
-  }
 
   yTosReady(module:any) {
     let deferred:JQueryDeferred = jQuery.Deferred();
